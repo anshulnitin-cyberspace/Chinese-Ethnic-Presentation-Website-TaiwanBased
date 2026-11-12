@@ -64,6 +64,6 @@ public/scenes/               optimized scene artwork
 
 ## Notes
 
-- The scene artwork was normalized from the supplied source images into web-friendly formats under `public/scenes/`.
+- The scene artwork was normalized from the supplied source images into responsive, web-friendly variants under `public/scenes/` (800/1600/3200 px widths). The full-resolution sources remain in the project root.
 - Menu photos are remote Unsplash images with emoji/gradient fallbacks.
 - This is a design demo, not a production payment terminal.

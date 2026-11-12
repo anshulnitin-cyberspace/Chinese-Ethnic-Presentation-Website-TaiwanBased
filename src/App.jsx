@@ -53,9 +53,9 @@ export default function App() {
 
   useEffect(() => {
     const sources = [
-      '/scenes/crossroads.webp',
+      '/scenes/crossroads-800.webp',
       '/scenes/cinema.jpg',
-      '/scenes/nightmarket.webp',
+      '/scenes/nightmarket-1600.webp',
     ]
     sources.forEach((src) => {
       const image = new Image()
@@ -76,7 +76,8 @@ export default function App() {
         {scene === 'crossroads' ? (
           <SceneFrame
             key="crossroads"
-            src="/scenes/crossroads.webp"
+            src="/scenes/crossroads-800.webp"
+            srcSet="/scenes/crossroads-800.webp 800w, /scenes/crossroads.webp 1600w"
             alt="An illustrated Taiwanese street intersection at dusk"
             mode={mode}
             objectPosition="center 55%"
@@ -113,7 +114,8 @@ export default function App() {
         {scene === 'nightmarket' ? (
           <SceneFrame
             key="nightmarket"
-            src="/scenes/nightmarket.webp"
+            src="/scenes/nightmarket-1600.webp"
+            srcSet="/scenes/nightmarket-1600.webp 1600w, /scenes/nightmarket.webp 3200w"
             alt="Lanterns glowing above a lively Taiwanese night market"
             mode={mode}
             objectPosition="center 52%"

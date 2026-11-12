@@ -27,6 +27,8 @@ const sceneVariants = {
  */
 export default function SceneFrame({
   src,
+  srcSet,
+  sizes = '100vw',
   alt,
   mode = 'walk',
   grade = '',
@@ -48,6 +50,8 @@ export default function SceneFrame({
     >
       <motion.img
         src={src}
+        srcSet={srcSet}
+        sizes={srcSet ? sizes : undefined}
         alt={alt}
         draggable="false"
         className={`absolute inset-0 h-full w-full select-none object-cover ${imageClass}`}

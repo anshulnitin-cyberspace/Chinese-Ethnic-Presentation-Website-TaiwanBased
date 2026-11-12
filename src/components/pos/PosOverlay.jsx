@@ -283,7 +283,7 @@ function MenuStep({
       <div className="pos-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-3 pt-4 sm:px-5">
         <div className="relative overflow-hidden rounded-2xl border border-white/10">
           <img
-            src="/scenes/nightmarket.webp"
+            src="/scenes/nightmarket-1600.webp"
             alt=""
             className="absolute inset-0 h-full w-full scale-105 object-cover opacity-40"
           />
@@ -1154,7 +1154,7 @@ export default function PosOverlay({ open, onClose, onComplete }) {
             transition={{ type: 'spring', stiffness: 290, damping: 32 }}
           >
             <img
-              src="/scenes/nightmarket.webp"
+              src="/scenes/nightmarket-1600.webp"
               alt=""
               className="pointer-events-none absolute inset-0 h-full w-full scale-110 object-cover opacity-[0.16] blur-2xl"
             />
