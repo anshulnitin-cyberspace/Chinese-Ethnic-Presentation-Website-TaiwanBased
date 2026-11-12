@@ -1,52 +1,18 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { Hourglass } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import SceneFrame from './components/SceneFrame'
+import { landmarks } from './data/landmarks'
 import Cinema from './scenes/Cinema'
 import Crossroads from './scenes/Crossroads'
+import Museum from './scenes/Museum'
 import NightMarket from './scenes/NightMarket'
-
-function AmbientToast({ message }) {
-  return (
-    <div className="pointer-events-none fixed inset-x-0 top-6 z-[60] flex justify-center px-4">
-      <AnimatePresence>
-        {message ? (
-          <motion.div
-            key={message}
-            initial={{ opacity: 0, y: -14, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -12, scale: 0.97 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="glass-panel flex items-center gap-3 rounded-full px-4 py-2.5"
-            role="status"
-            aria-live="polite"
-          >
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-200/10 text-amber-200/80">
-              <Hourglass size={13} strokeWidth={1.7} />
-            </span>
-            <span className="text-[10px] tracking-[0.08em] text-white/75">{message}</span>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-    </div>
-  )
-}
 
 export default function App() {
   const [scene, setScene] = useState('crossroads')
   const [mode, setMode] = useState('walk')
-  const [toast, setToast] = useState(null)
-  const toastTimer = useRef(null)
-
-  const showToast = (message) => {
-    setToast(message)
-    if (toastTimer.current) window.clearTimeout(toastTimer.current)
-    toastTimer.current = window.setTimeout(() => setToast(null), 3400)
-  }
 
   const navigate = (nextScene, transition) => {
     if (nextScene === scene) return
-    setToast(null)
     setMode(transition)
     setScene(nextScene)
   }
@@ -55,20 +21,15 @@ export default function App() {
     const sources = [
       '/scenes/crossroads-800.webp',
       '/scenes/cinema.jpg',
+      '/scenes/museum-960.webp',
       '/scenes/nightmarket-1600.webp',
+      ...landmarks.map((landmark) => landmark.image),
     ]
     sources.forEach((src) => {
       const image = new Image()
       image.src = src
     })
   }, [])
-
-  useEffect(
-    () => () => {
-      if (toastTimer.current) window.clearTimeout(toastTimer.current)
-    },
-    [],
-  )
 
   return (
     <main className="relative h-[100dvh] w-full overflow-hidden bg-[#060709]">
@@ -88,9 +49,7 @@ export default function App() {
             <Crossroads
               onCinema={() => navigate('cinema', 'zoom')}
               onNightMarket={() => navigate('nightmarket', 'walk')}
-              onComingSoon={() =>
-                showToast('前方巷弄仍在準備中 · This alley is coming soon')
-              }
+              onMuseum={() => navigate('museum', 'walk')}
             />
           </SceneFrame>
         ) : null}
@@ -108,6 +67,23 @@ export default function App() {
             imageScale={1}
           >
             <Cinema onBack={() => navigate('crossroads', 'emerge')} />
+          </SceneFrame>
+        ) : null}
+
+        {scene === 'museum' ? (
+          <SceneFrame
+            key="museum"
+            src="/scenes/museum-960.webp"
+            srcSet="/scenes/museum-960.webp 960w, /scenes/museum.webp 1920w"
+            alt="A glowing gallery hall of Taiwanese landmarks"
+            mode={mode}
+            objectPosition="center 48%"
+            grade="bg-gradient-to-b from-[#050710]/70 via-transparent to-[#040508]/80"
+            moteTone="amber"
+            moteCount={22}
+            imageScale={1.05}
+          >
+            <Museum onBack={() => navigate('crossroads', 'emerge')} />
           </SceneFrame>
         ) : null}
 
@@ -130,8 +106,6 @@ export default function App() {
 
       <div className="grain-layer pointer-events-none fixed inset-0 z-[56] opacity-[0.055] mix-blend-overlay" />
       <div className="pointer-events-none fixed inset-0 z-[57] shadow-[inset_0_0_180px_rgba(0,0,0,0.5)]" />
-
-      <AmbientToast message={toast} />
     </main>
   )
 }

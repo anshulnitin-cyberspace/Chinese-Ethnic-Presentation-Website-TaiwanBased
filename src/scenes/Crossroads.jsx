@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import FloorArrow from '../components/FloorArrow'
 import { SceneCaption, SceneHint } from '../components/SceneCaption'
 
-export default function Crossroads({ onCinema, onNightMarket, onComingSoon }) {
+export default function Crossroads({ onCinema, onNightMarket, onMuseum }) {
   return (
     <div className="relative h-full w-full">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_74%_18%,rgba(255,160,92,0.13),transparent_44%),radial-gradient(circle_at_16%_32%,rgba(56,132,148,0.12),transparent_46%)]" />
@@ -43,11 +43,11 @@ export default function Crossroads({ onCinema, onNightMarket, onComingSoon }) {
       <div className="absolute bottom-[11%] left-1/2 z-30 -translate-x-1/2 sm:bottom-[13%]">
         <FloorArrow
           direction="straight"
-          title="前方"
-          subtitle="Coming soon"
+          title="地景館"
+          subtitle="Landmark museum"
           accent="#9ecbb8"
           size="lg"
-          onClick={onComingSoon}
+          onClick={onMuseum}
         />
       </div>
 

@@ -1,13 +1,14 @@
 # Formosa After Dark · 福爾摩沙之夜
 
-An interactive, illustrated walk through a Taiwanese city at dusk. Navigate a painted crossroads with perspective floor arrows, step into an old cinema, and order from a glowing night-market stall through a Chinese Smart POS payment flow.
+An interactive, illustrated walk through a Taiwanese city at dusk. Navigate a painted crossroads with perspective floor arrows, step into an old cinema, browse a landmark museum of flip-card exhibits, and order from a glowing night-market stall through a Chinese Smart POS payment flow.
 
 Built with React, Tailwind CSS, and Framer Motion.
 
 ## The experience
 
-- **Crossroads** — three painted floor arrows (Cinema, Night Market, and a soon-to-open alley) with perspective, hover lift, and idle pulse.
+- **Crossroads** — three painted floor arrows (Cinema, Landmark Museum, and Night Market) with perspective, hover lift, and idle pulse.
 - **Cinema** — a full-bleed animated film pinned onto the projection screen painted into the artwork, audience silhouettes, and a floor arrow back to the street.
+- **Landmark Museum** — a glowing gallery hall with a central carousel of Taiwanese landmarks. Shuffle with the side arrows, then tap a card to flip it and read the bilingual museum label on the back. All exhibits come from `src/data/landmarks.js`.
 - **Night Market** — lantern-lit stalls and a glowing QR sign. Tap the sign to run the scanner, then follow the payment flow.
 
 ### Night-market POS demo
@@ -50,8 +51,8 @@ npm run preview
 
 ```text
 src/
-  App.jsx                    scene state, transitions, ambient toast
-  scenes/                    Crossroads, Cinema, NightMarket
+  App.jsx                    scene state, transitions, asset preloading
+  scenes/                    Crossroads, Cinema, Museum, NightMarket
   components/
     FloorArrow.jsx           perspective floor navigation
     SceneFrame.jsx           cinematic scene transitions
@@ -59,7 +60,10 @@ src/
     pos/                     Smart POS overlay, payment sheet, copy
   lib/useCoverFrame.js       aligns overlays to object-cover artwork
   data/menu.js               mock night-market menu
+  data/landmarks.js          editable landmark exhibits
 public/scenes/               optimized scene artwork
+public/landmarks/            hand-authored landmark illustrations
+design/                      editable SVG sources for generated artwork
 ```
 
 ## Notes
