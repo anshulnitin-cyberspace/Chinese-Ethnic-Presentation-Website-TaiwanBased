@@ -11,7 +11,11 @@ dist
 dist-ssr
 *.local
 
-# Editor / OS
+# Editor / OS / image tool temp files
+*.tmp
+~*
+*.crdownload
+*.partial
 .vscode/*
 !.vscode/extensions.json
 .idea
