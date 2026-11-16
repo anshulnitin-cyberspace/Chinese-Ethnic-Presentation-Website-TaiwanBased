@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 import { Motes } from './Motes'
 
 const sceneVariants = {
@@ -37,8 +38,13 @@ export default function SceneFrame({
   moteTone = 'amber',
   moteCount = 18,
   imageScale = 1.07,
+  videoSrc,
+  videoPoster,
   children,
 }) {
+  const [videoFailed, setVideoFailed] = useState(false)
+  const showVideo = Boolean(videoSrc) && !videoFailed
+
   return (
     <motion.section
       className="absolute inset-0 overflow-hidden bg-[#07080a] will-change-transform"
@@ -48,18 +54,40 @@ export default function SceneFrame({
       animate="center"
       exit="exit"
     >
-      <motion.img
-        src={src}
-        srcSet={srcSet}
-        sizes={srcSet ? sizes : undefined}
-        alt={alt}
-        draggable="false"
-        className={`absolute inset-0 h-full w-full select-none object-cover ${imageClass}`}
-        style={{ objectPosition }}
-        initial={{ scale: imageScale }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 2.8, ease: [0.22, 1, 0.36, 1] }}
-      />
+      {showVideo ? (
+        <motion.video
+          src={videoSrc}
+          poster={videoPoster ?? src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+          aria-hidden="true"
+          tabIndex={-1}
+          draggable="false"
+          onError={() => setVideoFailed(true)}
+          className={`absolute inset-0 h-full w-full select-none object-cover ${imageClass}`}
+          style={{ objectPosition }}
+          initial={{ scale: imageScale }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 2.8, ease: [0.22, 1, 0.36, 1] }}
+        />
+      ) : (
+        <motion.img
+          src={src}
+          srcSet={srcSet}
+          sizes={srcSet ? sizes : undefined}
+          alt={alt}
+          draggable="false"
+          className={`absolute inset-0 h-full w-full select-none object-cover ${imageClass}`}
+          style={{ objectPosition }}
+          initial={{ scale: imageScale }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 2.8, ease: [0.22, 1, 0.36, 1] }}
+        />
+      )}
 
       <div className={`pointer-events-none absolute inset-0 ${grade}`} />
       <Motes tone={moteTone} count={moteCount} />

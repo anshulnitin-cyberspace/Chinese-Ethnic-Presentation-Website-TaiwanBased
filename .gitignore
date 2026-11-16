@@ -15,7 +15,6 @@ dist-ssr
 # 100 MB). Host it and set VITE_CINEMA_VIDEO_URL, or keep it in the root for
 # local dev; see "Media & ambient audio" in the README.
 /*.mp4
-public/media/*.mp4
 
 # Editor / OS / image tool temp files
 *.tmp

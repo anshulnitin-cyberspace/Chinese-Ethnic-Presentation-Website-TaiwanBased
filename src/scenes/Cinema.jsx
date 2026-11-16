@@ -9,8 +9,8 @@ import { MEDIA } from '../config/media'
  *  CINEMA MEDIA CONFIG
  *  The movie file lives in the project root; its path is defined once in
  *  `src/config/media.js` (MEDIA.cinema.video). Swap the filename there.
- * ─────────────────────────────────────────────────────────────────────────── *  Deployments can point at a hosted copy with VITE_CINEMA_VIDEO_URL.
- */
+ *  Deployments can point at a hosted copy with VITE_CINEMA_VIDEO_URL.
+ * ─────────────────────────────────────────────────────────────────────────── */
 const FILM_SRC = import.meta.env.VITE_CINEMA_VIDEO_URL || MEDIA.cinema.video
 
 const EASE = [0.22, 1, 0.36, 1]
@@ -200,7 +200,7 @@ function Controls({
   )
 }
 
-export default function Cinema({ onBack }) {
+export default function Cinema({ onBack, muted = false }) {
   const videoRef = useRef(null)
   const [started, setStarted] = useState(false)
   const [playing, setPlaying] = useState(false)
@@ -228,6 +228,13 @@ export default function Cinema({ onBack }) {
       video?.pause()
     }
   }, [])
+
+  // The corner mute control drives the film's own audio track while the
+  // cinema is on screen (the ambient music is already silent here).
+  useEffect(() => {
+    const video = videoRef.current
+    if (video) video.muted = muted
+  }, [muted])
 
   // Reveal the controls on any pointer activity, then let them fade away while
   // the film keeps playing. Paused or scrubbing keeps them pinned open.
@@ -345,6 +352,7 @@ export default function Cinema({ onBack }) {
               preload="metadata"
               playsInline
               loop={false}
+              muted={muted}
               aria-label="A short film about Taiwan, playing in the old cinema"
               className="absolute inset-0 h-full w-full bg-black object-cover"
               onClick={handleSurface}

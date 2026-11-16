@@ -17,7 +17,7 @@ export default function Crossroads({ onCinema, onNightMarket, onMuseum }) {
 
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none absolute right-5 top-7 hidden items-center gap-2 text-[9px] uppercase tracking-[0.32em] text-white/40 sm:flex"
+        className="pointer-events-none absolute right-40 top-7 hidden items-center gap-2 text-[9px] uppercase tracking-[0.32em] text-white/40 sm:flex"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 1.2 }}

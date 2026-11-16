@@ -52,17 +52,19 @@ npm run preview
 Every large asset is configured in one place: **`src/config/media.js`**.
 
 ```js
-MEDIA.cinema.video        '/TaiwanCinema.mp4'                 // theatre reel (hosted)
-MEDIA.bgm.main            '/media/BGM_MainScreenandMuseum.mp3' // Crossroads + Museum
-MEDIA.bgm.nightMarket     '/media/NightMarket.mp3'             // Night Market
-MEDIA.bgm.volume          0.12                                 // 12% ambient level
+MEDIA.cinema.video        '/TaiwanCinema.mp4'                  // theatre reel (hosted)
+MEDIA.nightMarket.backgroundVideo '/media/NightMarketBGVideo.mp4' // looping scene backdrop
+MEDIA.bgm.main            '/media/BGM_MainScreenandMuseum.mp3' // every scene except the cinema
+MEDIA.bgm.volume          0.12                                 // default 12% ambient level
 LANDMARK_MEDIA.<place>    desktopImage / mobileImage           // per-orientation crops
 ```
 
-- Landmark photos and music are committed under **`public/media/`**, so they deploy automatically.
+- Landmark photos, music and the night-market loop are committed under **`public/media/`**, so they deploy automatically.
 - The cinema reel is over GitHub's 100 MB file limit, so it is **not** in git. For local development, drop `TaiwanCinema.mp4` in the project root — Vite serves it, and `npm run build` hard-links it into `dist/` (see `ROOT_MEDIA_FILES`).
 - For deployment, upload the reel somewhere public and set **`VITE_CINEMA_VIDEO_URL`** to its URL (locally in `.env.local`, or in Vercel → Project → Settings → Environment Variables). A GitHub **Release asset** works well: create a release, attach the MP4, and use `https://github.com/<owner>/<repo>/releases/download/<tag>/TaiwanCinema.mp4`.
-- Music is looped at `0.12` volume. Crossroads and Museum share one track, so walking between them never restarts it; the Night Market crossfades to its own theme; the Cinema fades both out. Playback starts on the first click or tap if the browser blocks autoplay. The small sound button in the bottom-right corner mutes/unmutes everything.
+- The Night Market backdrop is a muted, looping `NightMarketBGVideo.mp4`; its poster/fallback is the existing scene artwork.
+- One ambient track covers Crossroads, the Landmark Museum and the Night Market, so walking between them never restarts the music. The Cinema fades it out. Playback starts on the first click or tap if the browser blocks autoplay.
+- The top-right control has a volume slider in the street, museum and night market. In the Cinema it becomes a mute toggle for the film's own audio track. The sound button restores the default level if the slider was dragged to zero.
 - Landmark exhibits show `mobileImage` (portrait, 3:4 card) below 768 px and `desktopImage` (landscape, 16:10 card) from 768 px up. `focalDesktop` / `focalMobile` tune each crop.
 
 ## Project structure

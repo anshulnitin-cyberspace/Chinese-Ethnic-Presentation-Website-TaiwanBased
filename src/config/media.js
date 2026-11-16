@@ -21,10 +21,14 @@ export const MEDIA = {
     video: '/TaiwanCinema.mp4',
   },
 
+  // ── Night Market ─────────────────────────────────────────────────────────
+  nightMarket: {
+    backgroundVideo: '/media/NightMarketBGVideo.mp4',
+  },
+
   // ── Ambient background music ─────────────────────────────────────────────
   bgm: {
-    main: '/media/BGM_MainScreenandMuseum.mp3', // ← Crossroads + Landmark Museum
-    nightMarket: '/media/NightMarket.mp3', // ← Night Market
+    main: '/media/BGM_MainScreenandMuseum.mp3', // ← every scene except the cinema
     volume: 0.12, // 12% — subtle atmosphere only
   },
 }

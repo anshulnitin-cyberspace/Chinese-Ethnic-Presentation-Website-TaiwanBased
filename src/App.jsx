@@ -2,6 +2,7 @@ import { AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import AmbientAudio from './components/AmbientAudio'
 import SceneFrame from './components/SceneFrame'
+import { MEDIA } from './config/media'
 import { landmarks } from './data/landmarks'
 import Cinema from './scenes/Cinema'
 import Crossroads from './scenes/Crossroads'
@@ -11,6 +12,9 @@ import NightMarket from './scenes/NightMarket'
 export default function App() {
   const [scene, setScene] = useState('crossroads')
   const [mode, setMode] = useState('walk')
+  const [bgmVolume, setBgmVolume] = useState(MEDIA.bgm.volume)
+  const [bgmMuted, setBgmMuted] = useState(false)
+  const [cinemaMuted, setCinemaMuted] = useState(false)
 
   const navigate = (nextScene, transition) => {
     if (nextScene === scene) return
@@ -75,7 +79,7 @@ export default function App() {
             moteCount={14}
             imageScale={1}
           >
-            <Cinema onBack={() => navigate('crossroads', 'emerge')} />
+            <Cinema muted={cinemaMuted} onBack={() => navigate('crossroads', 'emerge')} />
           </SceneFrame>
         ) : null}
 
@@ -102,6 +106,7 @@ export default function App() {
             src="/scenes/nightmarket-1600.webp"
             srcSet="/scenes/nightmarket-1600.webp 1600w, /scenes/nightmarket.webp 3200w"
             alt="Lanterns glowing above a lively Taiwanese night market"
+            videoSrc={MEDIA.nightMarket.backgroundVideo}
             mode={mode}
             objectPosition="center 52%"
             grade="bg-gradient-to-t from-[#09050c]/70 via-[#120815]/20 to-[#07050c]/35"
@@ -113,7 +118,15 @@ export default function App() {
         ) : null}
       </AnimatePresence>
 
-      <AmbientAudio scene={scene} />
+      <AmbientAudio
+        scene={scene}
+        volume={bgmVolume}
+        onVolumeChange={setBgmVolume}
+        muted={bgmMuted}
+        onToggleMute={() => setBgmMuted((value) => !value)}
+        cinemaMuted={cinemaMuted}
+        onToggleCinemaMute={() => setCinemaMuted((value) => !value)}
+      />
 
       <div className="grain-layer pointer-events-none fixed inset-0 z-[56] opacity-[0.055] mix-blend-overlay" />
       <div className="pointer-events-none fixed inset-0 z-[57] shadow-[inset_0_0_180px_rgba(0,0,0,0.5)]" />
