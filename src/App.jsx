@@ -1,5 +1,6 @@
 import { AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import AmbientAudio from './components/AmbientAudio'
 import SceneFrame from './components/SceneFrame'
 import { landmarks } from './data/landmarks'
 import Cinema from './scenes/Cinema'
@@ -18,13 +19,21 @@ export default function App() {
   }
 
   useEffect(() => {
+    // Warm the scene backdrops and the first exhibit only. Landmark photos are
+    // large (several MB each), so the rest stream in as the carousel reaches
+    // them instead of competing with the cinema video for bandwidth.
+    const wide = window.matchMedia('(min-width: 768px)').matches
+    const showcase = landmarks[0]
+
     const sources = [
       '/scenes/crossroads-800.webp',
       '/scenes/cinema.jpg',
       '/scenes/museum-960.webp',
       '/scenes/nightmarket-1600.webp',
-      ...landmarks.map((landmark) => landmark.image),
+      ...(showcase ? [wide ? showcase.desktopImage : showcase.mobileImage] : []),
+      ...(wide ? landmarks.slice(1).map((landmark) => landmark.desktopImage) : []),
     ]
+
     sources.forEach((src) => {
       const image = new Image()
       image.src = src
@@ -103,6 +112,8 @@ export default function App() {
           </SceneFrame>
         ) : null}
       </AnimatePresence>
+
+      <AmbientAudio scene={scene} />
 
       <div className="grain-layer pointer-events-none fixed inset-0 z-[56] opacity-[0.055] mix-blend-overlay" />
       <div className="pointer-events-none fixed inset-0 z-[57] shadow-[inset_0_0_180px_rgba(0,0,0,0.5)]" />

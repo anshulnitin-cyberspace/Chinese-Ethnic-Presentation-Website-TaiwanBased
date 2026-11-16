@@ -11,6 +11,15 @@ dist
 dist-ssr
 *.local
 
+# Large local media (movie, music, landmark photos) live in the project root
+# and are copied into the build; see "Media & ambient audio" in the README.
+/*.mp4
+/*.mp3
+/*Horizontal.png
+/*horizontal.png
+/*Vertical.png
+/*vertical.png
+
 # Editor / OS / image tool temp files
 *.tmp
 ~*

@@ -81,20 +81,6 @@ img {
   );
 }
 
-.film-screen {
-  background:
-    radial-gradient(ellipse at 28% 22%, #ffd9a0 0%, rgba(255, 185, 110, 0.55) 18%, transparent 52%),
-    radial-gradient(ellipse at 78% 70%, #b34a6f 0%, transparent 58%),
-    radial-gradient(ellipse at 48% 118%, #2c747b 0%, transparent 60%),
-    linear-gradient(145deg, #352034 0%, #6e3145 42%, #1a2432 100%);
-}
-
-.film-sun {
-  box-shadow:
-    0 0 34px 12px rgba(255, 222, 156, 0.55),
-    0 0 90px 32px rgba(255, 174, 102, 0.25);
-}
-
 .text-shadow-soft {
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.65), 0 1px 2px rgba(0, 0, 0, 0.6);
 }
@@ -246,6 +232,254 @@ img {
 .floor-arrow-button:hover .floor-label {
   opacity: 1;
   transform: translateY(-2px);
+}
+
+/* ---------- Cinema ---------- */
+
+/* The stage region is a size container: `cqh` lets the 16:9 screen shrink to
+   whatever vertical space is left between the caption and the audience. */
+.cinema-stage-region,
+.landmark-stage-region {
+  container-type: size;
+}
+
+.cinema-stage {
+  width: min(90vw, 960px); /* fallback for older engines */
+  width: min(100cqw, calc(100cqh * 16 / 9));
+}
+
+/* Reserve the caption band at the top. In portrait the screen spans the width,
+   so it must start below the title; in landscape it is narrower and can sit
+   higher, which keeps short landscape phones usable. */
+.cinema-stage-region {
+  top: clamp(8.75rem, 20dvh, 11.5rem);
+  bottom: 34%;
+}
+
+@media (min-aspect-ratio: 1 / 1) {
+  .cinema-stage-region {
+    top: clamp(1.5rem, 26dvh, 9rem);
+  }
+}
+
+.cinema-scrubber {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.cinema-scrubber::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #f4c87b 0%,
+    #f4c87b var(--progress, 0%),
+    rgba(255, 255, 255, 0.22) var(--progress, 0%),
+    rgba(255, 255, 255, 0.22) 100%
+  );
+}
+
+.cinema-scrubber::-moz-range-track {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.cinema-scrubber::-moz-range-progress {
+  height: 3px;
+  border-radius: 999px;
+  background: #f4c87b;
+}
+
+.cinema-scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  margin-top: -4px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffe9c6;
+  box-shadow:
+    0 0 10px rgba(244, 200, 123, 0.65),
+    0 1px 2px rgba(0, 0, 0, 0.7);
+  transition: transform 160ms ease;
+}
+
+.cinema-scrubber:hover::-webkit-slider-thumb,
+.cinema-scrubber:active::-webkit-slider-thumb {
+  transform: scale(1.18);
+}
+
+.cinema-scrubber::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffe9c6;
+  box-shadow:
+    0 0 10px rgba(244, 200, 123, 0.65),
+    0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.cinema-scrubber:focus-visible {
+  outline: none;
+}
+
+.cinema-scrubber:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 4px rgba(244, 200, 123, 0.3),
+    0 0 10px rgba(244, 200, 123, 0.65);
+}
+
+/* ---------- Landmark museum ---------- */
+
+/* Portrait card on phones, landscape card from 768px up. Both are bounded by
+   the available height so the whole row always fits on screen. */
+.landmark-stage {
+  width: min(68vw, 320px);
+  aspect-ratio: 3 / 4;
+  width: min(72cqw, 320px, calc(100cqh * 0.75));
+}
+
+.landmark-photo {
+  object-position: var(--focal-mobile, center);
+}
+
+@media (min-width: 768px) {
+  .landmark-stage {
+    width: min(56cqw, 560px, calc(100cqh * 1.6));
+    aspect-ratio: 16 / 10;
+  }
+
+  .landmark-photo {
+    object-position: var(--focal-desktop, center);
+  }
+}
+
+/* The museum label on the back of the card is dense. On short cards the
+   container steps the whole block down so the copy still fits: the inner box
+   is laid out 1/scale larger and then scaled back, which both shrinks the
+   type and widens the text column. */
+[data-card-back] {
+  container-type: size;
+}
+
+.landmark-back-fit {
+  --back-fit: 1;
+  width: calc(100% / var(--back-fit));
+  height: calc(100% / var(--back-fit));
+  transform: scale(var(--back-fit));
+  transform-origin: top left;
+}
+
+/* Narrow cards: widen the layout column (which unwraps the copy) and shrink
+   the type until the whole label fits. */
+@container (max-width: 250px) and (max-height: 330px) {
+  .landmark-back-fit { --back-fit: 0.92; }
+}
+
+@container (max-width: 225px) {
+  .landmark-back-fit { --back-fit: 0.86; }
+}
+
+@container (max-width: 200px) {
+  .landmark-back-fit { --back-fit: 0.73; }
+}
+
+@container (max-width: 170px) {
+  .landmark-back-fit { --back-fit: 0.7; }
+}
+
+/* Wide but short cards (landscape, short desktop windows). */
+@container (min-width: 330px) and (max-height: 262px) {
+  .landmark-back-fit { --back-fit: 0.93; }
+}
+
+@container (min-width: 330px) and (max-height: 230px) {
+  .landmark-back-fit { --back-fit: 0.86; }
+}
+
+/* Back to the street. Centered under the carousel by default. */
+.landmark-back-arrow {
+  position: absolute;
+  bottom: 4.5%;
+  left: 50%;
+  z-index: 40;
+  translate: -50% 0;
+  scale: 0.82;
+  transform-origin: bottom center;
+}
+
+@media (min-width: 640px) {
+  .landmark-back-arrow {
+    scale: 1;
+  }
+}
+
+/* Short windows: keep the floor arrow clear of the card. */
+@media (max-height: 680px) {
+  .landmark-stage-region {
+    bottom: 28%;
+  }
+
+  .landmark-back-arrow {
+    bottom: 4%;
+    scale: 0.72;
+  }
+}
+
+/* Keep the carousel below the scene caption. */
+.landmark-stage-region {
+  padding-top: 7.5rem;
+}
+
+@media (min-width: 640px) {
+  .landmark-stage-region {
+    padding-top: 9rem;
+  }
+}
+
+/* Short landscape phones: keep the scene title only, so the exhibit, screen
+   or stall gets the vertical space. */
+@media (max-height: 560px) and (min-aspect-ratio: 1 / 1) {
+  .scene-caption-kicker,
+  .scene-caption-meta {
+    display: none;
+  }
+
+  .scene-caption-title {
+    margin-top: 0;
+    font-size: 1.5rem;
+  }
+
+  .scene-caption-subtitle {
+    margin-top: 0.3rem;
+    font-size: 0.6875rem;
+  }
+}
+
+/* Short landscape phones: lift the stage clear of the title and tuck the back
+   arrow into the bottom-left corner so it never overlaps the exhibit. */
+@media (max-height: 560px) and (min-aspect-ratio: 1 / 1) {
+  .landmark-stage-region {
+    top: 5.25rem;
+    bottom: 2%;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .landmark-back-arrow {
+    bottom: 4%;
+    left: 5%;
+    translate: 0 0;
+    scale: 0.62;
+    transform-origin: bottom left;
+  }
 }
 
 /* ---------- Misc ---------- */

@@ -80,13 +80,24 @@ function ShuffleButton({ direction, accent, onClick }) {
 function CardFront({ landmark, index, total }) {
   return (
     <div data-card-front className="relative h-full w-full overflow-hidden bg-[#0a0c10]">
-      <img
-        src={landmark.image}
-        alt={`${landmark.nameZh} — ${landmark.name}`}
-        draggable="false"
-        className="h-full w-full select-none object-cover"
-        style={{ objectPosition: landmark.focal ?? 'center' }}
-      />
+      {/* Horizontal crop at >= 768px, vertical crop below. Each orientation
+          gets its own object-position so the subject stays centred. */}
+      <picture
+        className="block h-full w-full"
+        style={{
+          '--focal-mobile': landmark.focalMobile ?? 'center',
+          '--focal-desktop': landmark.focalDesktop ?? landmark.focal ?? 'center',
+        }}
+      >
+        <source media="(min-width: 768px)" srcSet={landmark.desktopImage} />
+        <img
+          src={landmark.mobileImage}
+          alt={`${landmark.nameZh} — ${landmark.name}`}
+          draggable="false"
+          decoding="async"
+          className="landmark-photo h-full w-full select-none object-cover"
+        />
+      </picture>
 
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_38%,transparent_38%,rgba(4,5,8,0.45)_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-[#07080b] via-[#07080b]/60 to-transparent" />
@@ -128,7 +139,7 @@ function CardBack({ landmark, index }) {
       <div className="pointer-events-none absolute inset-0 opacity-[0.16] mix-blend-multiply [background-image:repeating-linear-gradient(112deg,rgba(90,64,32,0.35)_0px,rgba(90,64,32,0.35)_1px,transparent_1px,transparent_5px)]" />
       <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-[#7e5f34]/30" />
 
-      <div data-card-back-inner className="relative flex h-full flex-col px-5 py-4 sm:px-7 sm:py-6">
+      <div data-card-back-inner className="landmark-back-fit relative flex h-full flex-col px-5 py-4 sm:px-7 sm:py-6">
         <div className="flex items-center justify-between gap-2 text-[6.5px] uppercase tracking-[0.24em] text-[#7c6138] sm:text-[8px]">
           <span className="flex items-center gap-1.5">
             <span className="h-1 w-1 rounded-full bg-[#a44a34]" />
@@ -313,11 +324,11 @@ export default function Museum({ onBack }) {
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[30%] bg-gradient-to-t from-[#05060a] via-[#05060a]/60 to-transparent" />
 
-      <div className="absolute left-1/2 top-[47%] z-30 w-full -translate-x-1/2 -translate-y-1/2 px-2">
-        <div className="mx-auto flex w-fit items-center gap-1 sm:gap-4">
+      <div className="landmark-stage-region pointer-events-none absolute inset-x-0 top-0 bottom-[20%] z-30 flex items-center justify-center px-2 pb-2">
+        <div className="pointer-events-auto flex w-fit items-center gap-1 sm:gap-4">
           <ShuffleButton direction={-1} accent={accent} onClick={() => go(-1)} />
 
-          <div data-landmark-stage className="relative h-[clamp(340px,48vh,430px)] w-[min(68vw,520px)]">
+          <div data-landmark-stage className="landmark-stage relative">
             <AnimatePresence initial={false} custom={direction}>
               <motion.div
                 key={active.id}
@@ -344,7 +355,7 @@ export default function Museum({ onBack }) {
         </div>
       </div>
 
-      <div className="absolute bottom-[4.5%] left-1/2 z-40 -translate-x-1/2 scale-[0.82] sm:bottom-[6%] sm:scale-100">
+      <div className="landmark-back-arrow">
         <FloorArrow
           direction="back"
           title="返回街口"

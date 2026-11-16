@@ -1,10 +1,19 @@
+import { LANDMARK_MEDIA } from '../config/media'
+
 /**
  * Landmark collection for the museum carousel.
  *
  * To add a landmark: append an object here. The carousel, counter, flip card
- * and navigation are all derived from this array. `icon` is a key from the
- * ICONS registry in `src/scenes/Museum.jsx`; unknown keys fall back to a
- * generic museum mark.
+ * and navigation are all derived from this array.
+ *
+ *   desktopImage  horizontal crop, shown at >= 768px (aspect 16/10 card)
+ *   mobileImage   vertical crop, shown below 768px (aspect 3/4 card)
+ *   focalDesktop / focalMobile  CSS object-position for each orientation
+ *   icon          key from the ICONS registry in `src/scenes/Museum.jsx`;
+ *                 unknown keys fall back to a generic museum mark.
+ *
+ * File paths live in `src/config/media.js` (LANDMARK_MEDIA) so the exact
+ * filenames can be changed in one place.
  */
 export const landmarks = [
   {
@@ -14,8 +23,9 @@ export const landmarks = [
     location: '台北 · 信義區',
     era: '2004',
     accent: '#e8bd7c',
-    image: '/landmarks/taipei-101.svg',
-    focal: 'center 55%',
+    ...LANDMARK_MEDIA.taipei101,
+    focalDesktop: 'center 55%',
+    focalMobile: 'center 45%',
     icon: 'tower',
     description:
       "Once the world's tallest tower, Taipei 101 rises in eight bamboo-like tiers. A 660-tonne golden damper sways inside to steady the building through typhoons and earthquakes.",
@@ -29,8 +39,9 @@ export const landmarks = [
     location: '新北 · 瑞芳',
     era: '1890s',
     accent: '#ef9a8f',
-    image: '/landmarks/jiufen.svg',
-    focal: 'center 55%',
+    ...LANDMARK_MEDIA.jiufen,
+    focalDesktop: 'center 55%',
+    focalMobile: 'center 62%',
     icon: 'lantern',
     description:
       "A gold-mining town spilling down a rain-soaked hillside, Jiufen's red lanterns and teahouses are said to have inspired Spirited Away. When the mines closed, its stairways found a second life in film.",
@@ -44,8 +55,9 @@ export const landmarks = [
     location: '花蓮 · 立霧溪',
     era: '1986',
     accent: '#8fc6ba',
-    image: '/landmarks/taroko-gorge.svg',
-    focal: 'center 52%',
+    ...LANDMARK_MEDIA.taroko,
+    focalDesktop: 'center 52%',
+    focalMobile: 'center 50%',
     icon: 'mountain',
     description:
       "The Liwu River has carved Taroko's marble walls for millions of years, leaving them turquoise in the half-light. Its name comes from the Truku people, who have lived in these mountains for centuries.",
@@ -59,8 +71,9 @@ export const landmarks = [
     location: '南投 · 魚池',
     era: '1934',
     accent: '#a9cbd0',
-    image: '/landmarks/sun-moon-lake.svg',
-    focal: '68% center',
+    ...LANDMARK_MEDIA.sunMoonLake,
+    focalDesktop: '68% center',
+    focalMobile: 'center 55%',
     icon: 'lake',
     description:
       'The eastern shore curves like a sun, the western like a crescent moon. Thao legend says the lake was found while hunting a white deer; today temples and cable cars circle the water.',
@@ -74,8 +87,9 @@ export const landmarks = [
     location: '嘉義 · 阿里山',
     era: '1912',
     accent: '#d9c7ab',
-    image: '/landmarks/alishan.svg',
-    focal: '42% center',
+    ...LANDMARK_MEDIA.alishan,
+    focalDesktop: '42% center',
+    focalMobile: 'center 45%',
     icon: 'cloud',
     description:
       'Ancient cypress forest floats above a sea of clouds. Built in 1912 to haul timber, the narrow-gauge forest railway now carries travellers up for sunrise over the Central Mountain Range.',
@@ -89,8 +103,9 @@ export const landmarks = [
     location: '台北 · 艋舺',
     era: '1738',
     accent: '#d8a46a',
-    image: '/landmarks/longshan-temple.svg',
-    focal: 'center 55%',
+    ...LANDMARK_MEDIA.longshan,
+    focalDesktop: 'center 55%',
+    focalMobile: 'center 45%',
     icon: 'temple',
     description:
       "Founded in 1738, Longshan Temple is Bangka's spiritual heart. Its swallowtail roof, carved pillars and drifting incense smoke have sheltered worshippers through centuries of fires, typhoons and rebuilding.",
