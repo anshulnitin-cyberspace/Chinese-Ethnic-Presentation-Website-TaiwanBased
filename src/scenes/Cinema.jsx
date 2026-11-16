@@ -9,8 +9,9 @@ import { MEDIA } from '../config/media'
  *  CINEMA MEDIA CONFIG
  *  The movie file lives in the project root; its path is defined once in
  *  `src/config/media.js` (MEDIA.cinema.video). Swap the filename there.
- * ─────────────────────────────────────────────────────────────────────────── */
-const FILM_SRC = MEDIA.cinema.video
+ * ─────────────────────────────────────────────────────────────────────────── *  Deployments can point at a hosted copy with VITE_CINEMA_VIDEO_URL.
+ */
+const FILM_SRC = import.meta.env.VITE_CINEMA_VIDEO_URL || MEDIA.cinema.video
 
 const EASE = [0.22, 1, 0.36, 1]
 

@@ -11,14 +11,11 @@ dist
 dist-ssr
 *.local
 
-# Large local media (movie, music, landmark photos) live in the project root
-# and are copied into the build; see "Media & ambient audio" in the README.
+# The cinema reel is ~1 GB and stays out of git (GitHub rejects files over
+# 100 MB). Host it and set VITE_CINEMA_VIDEO_URL, or keep it in the root for
+# local dev; see "Media & ambient audio" in the README.
 /*.mp4
-/*.mp3
-/*Horizontal.png
-/*horizontal.png
-/*Vertical.png
-/*vertical.png
+public/media/*.mp4
 
 # Editor / OS / image tool temp files
 *.tmp

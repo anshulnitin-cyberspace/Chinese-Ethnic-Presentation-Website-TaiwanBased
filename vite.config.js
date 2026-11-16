@@ -4,19 +4,20 @@ import tailwindcss from '@tailwindcss/vite'
 import { copyFile, link, mkdir } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { MEDIA_FILES } from './src/config/media.js'
+import { ROOT_MEDIA_FILES } from './src/config/media.js'
 
 const rootDir = dirname(fileURLToPath(import.meta.url))
 
 /**
- * The video, music tracks and landmark photos are large and live in the project
- * root (they are intentionally git-ignored). Vite serves the root in `dev`, but
- * a build only copies `public/`. This plugin mirrors every file listed in
- * `MEDIA_FILES` into `dist/` so the same root-relative URLs keep working.
+ * The cinema reel is too large to commit, so it lives in the project root
+ * (git-ignored). Vite serves the root in `dev`, but a build only copies
+ * `public/`. This plugin mirrors every file listed in `ROOT_MEDIA_FILES` into
+ * `dist/` so the same root-relative URL keeps working locally.
  *
  * A hard link is used when possible (instant, no extra disk space); otherwise
- * the file is copied. Missing files are reported as warnings instead of
- * failing the build.
+ * the file is copied. Missing files (or remote URLs) are skipped with a
+ * warning instead of failing the build — production can set
+ * `VITE_CINEMA_VIDEO_URL` to a hosted copy instead.
  */
 function copyRootMedia() {
   return {
@@ -28,7 +29,9 @@ function copyRootMedia() {
         : join(rootDir, 'dist')
       const notify = this.warn.bind(this)
 
-      for (const file of MEDIA_FILES) {
+      for (const file of ROOT_MEDIA_FILES) {
+        if (/^(?:https?:)?\/\//i.test(file)) continue
+
         const relative = file.replace(/^\/+/, '')
         const from = join(rootDir, relative)
         const to = join(outDir, relative)

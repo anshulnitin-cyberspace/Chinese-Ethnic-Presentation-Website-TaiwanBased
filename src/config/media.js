@@ -2,25 +2,29 @@
  * ─────────────────────────────────────────────────────────────────────────────
  *  CENTRAL MEDIA CONFIG
  * ─────────────────────────────────────────────────────────────────────────────
- *  Drop the real files in the project ROOT (next to package.json) or in
- *  `public/`. Paths start with `/`, so Vite serves them from the site root in
- *  development and the build step copies the root files into `dist/`.
+ *  Landmark photos and music live in `public/media/` and ARE committed to git,
+ *  so a clean clone (and Vercel) serves them with no extra setup.
+ *
+ *  The cinema reel is ~1 GB, which is over GitHub's 100 MB file limit. Keep it
+ *  out of git and either:
+ *    ▸ point `VITE_CINEMA_VIDEO_URL` at a hosted copy (`.env.production`), or
+ *    ▸ drop `TaiwanCinema.mp4` in the project root for local dev — Vite serves
+ *      it, and `vite.config.js` copies it into `dist/` for local builds.
  *
  *  ▸ Swap a filename on the right to point at a different source file.
- *  ▸ `vite.config.js` reads MEDIA_FILES and copies each root file into dist
- *    (hard-link when possible) so production builds resolve the same URLs.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 export const MEDIA = {
   // ── Cinema ────────────────────────────────────────────────────────────────
   cinema: {
-    video: '/TaiwanCinema.mp4', // ← the movie projected on the theatre screen
+    // Local fallback. Production can override it with VITE_CINEMA_VIDEO_URL.
+    video: '/TaiwanCinema.mp4',
   },
 
   // ── Ambient background music ─────────────────────────────────────────────
   bgm: {
-    main: '/BGM_MainScreenandMuseum.mp3', // ← Crossroads + Landmark Museum
-    nightMarket: '/NightMarket.mp3', // ← Night Market
+    main: '/media/BGM_MainScreenandMuseum.mp3', // ← Crossroads + Landmark Museum
+    nightMarket: '/media/NightMarket.mp3', // ← Night Market
     volume: 0.12, // 12% — subtle atmosphere only
   },
 }
@@ -31,38 +35,33 @@ export const MEDIA = {
  */
 export const LANDMARK_MEDIA = {
   taipei101: {
-    desktopImage: '/Taipei101Horizontal.png',
-    mobileImage: '/Taipei101Vertical.png',
+    desktopImage: '/media/Taipei101Horizontal.png',
+    mobileImage: '/media/Taipei101Vertical.png',
   },
   jiufen: {
-    desktopImage: '/jiufenhorizontal.png',
-    mobileImage: '/jiufenvertical.png',
+    desktopImage: '/media/jiufenhorizontal.png',
+    mobileImage: '/media/jiufenvertical.png',
   },
   taroko: {
-    desktopImage: '/tarokogorgehorizontal.png',
-    mobileImage: '/tarokogorgevertical.png',
+    desktopImage: '/media/tarokogorgehorizontal.png',
+    mobileImage: '/media/tarokogorgevertical.png',
   },
   sunMoonLake: {
-    desktopImage: '/sunmoonlakehorizontal.png',
-    mobileImage: '/sunmoonlakevertical.png',
+    desktopImage: '/media/sunmoonlakehorizontal.png',
+    mobileImage: '/media/sunmoonlakevertical.png',
   },
   alishan: {
-    desktopImage: '/alishanhorizontal.png',
-    mobileImage: '/alishanvertical.png',
+    desktopImage: '/media/alishanhorizontal.png',
+    mobileImage: '/media/alishanvertical.png',
   },
   longshan: {
-    desktopImage: '/longshantemplehorizontal.png',
-    mobileImage: '/longshantemplevertical.png',
+    desktopImage: '/media/longshantemplehorizontal.png',
+    mobileImage: '/media/longshantemplevertical.png',
   },
 }
 
-/** Every root-relative file the production build must copy into `dist/`. */
-export const MEDIA_FILES = [
-  MEDIA.cinema.video,
-  MEDIA.bgm.main,
-  MEDIA.bgm.nightMarket,
-  ...Object.values(LANDMARK_MEDIA).flatMap(({ desktopImage, mobileImage }) => [
-    desktopImage,
-    mobileImage,
-  ]),
-]
+/**
+ * Files that stay in the project root (not `public/`) because they are too
+ * large to commit. `vite.config.js` copies them into `dist/` after a build.
+ */
+export const ROOT_MEDIA_FILES = [MEDIA.cinema.video]

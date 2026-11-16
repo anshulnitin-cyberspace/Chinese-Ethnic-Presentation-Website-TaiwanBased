@@ -52,16 +52,16 @@ npm run preview
 Every large asset is configured in one place: **`src/config/media.js`**.
 
 ```js
-MEDIA.cinema.video        '/TaiwanCinema.mp4'              // theatre reel
-MEDIA.bgm.main            '/BGM_MainScreenandMuseum.mp3'   // Crossroads + Museum
-MEDIA.bgm.nightMarket     '/NightMarket.mp3'               // Night Market
-MEDIA.bgm.volume          0.12                             // 12% ambient level
-LANDMARK_MEDIA.<place>    desktopImage / mobileImage       // per-orientation crops
+MEDIA.cinema.video        '/TaiwanCinema.mp4'                 // theatre reel (hosted)
+MEDIA.bgm.main            '/media/BGM_MainScreenandMuseum.mp3' // Crossroads + Museum
+MEDIA.bgm.nightMarket     '/media/NightMarket.mp3'             // Night Market
+MEDIA.bgm.volume          0.12                                 // 12% ambient level
+LANDMARK_MEDIA.<place>    desktopImage / mobileImage           // per-orientation crops
 ```
 
-- Put the real files in the **project root** (next to `package.json`) or in `public/`. Paths start with `/`.
-- Vite serves root files in `npm run dev`. `npm run build` also copies every file in `MEDIA_FILES` into `dist/` (hard link when possible, otherwise a copy), so the same URLs work in production. Missing files only produce a build warning.
-- The media files are intentionally **not committed** (the movie alone is about 1 GB). Keep them next to the project and deploy them alongside `dist/`.
+- Landmark photos and music are committed under **`public/media/`**, so they deploy automatically.
+- The cinema reel is over GitHub's 100 MB file limit, so it is **not** in git. For local development, drop `TaiwanCinema.mp4` in the project root — Vite serves it, and `npm run build` hard-links it into `dist/` (see `ROOT_MEDIA_FILES`).
+- For deployment, upload the reel somewhere public and set **`VITE_CINEMA_VIDEO_URL`** to its URL (locally in `.env.local`, or in Vercel → Project → Settings → Environment Variables). A GitHub **Release asset** works well: create a release, attach the MP4, and use `https://github.com/<owner>/<repo>/releases/download/<tag>/TaiwanCinema.mp4`.
 - Music is looped at `0.12` volume. Crossroads and Museum share one track, so walking between them never restarts it; the Night Market crossfades to its own theme; the Cinema fades both out. Playback starts on the first click or tap if the browser blocks autoplay. The small sound button in the bottom-right corner mutes/unmutes everything.
 - Landmark exhibits show `mobileImage` (portrait, 3:4 card) below 768 px and `desktopImage` (landscape, 16:10 card) from 768 px up. `focalDesktop` / `focalMobile` tune each crop.
 
@@ -81,6 +81,7 @@ src/
   data/menu.js               mock night-market menu
   data/landmarks.js          editable landmark exhibits (both orientations)
 public/scenes/               optimized scene artwork
+public/media/                landmark photos + music (committed)
 public/landmarks/            legacy hand-authored landmark illustrations
 design/                      editable SVG sources for generated artwork
 ```
