@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { copyFile, link, mkdir } from 'node:fs/promises'
@@ -15,15 +15,17 @@ const rootDir = dirname(fileURLToPath(import.meta.url))
  * `dist/` so the same root-relative URL keeps working locally.
  *
  * A hard link is used when possible (instant, no extra disk space); otherwise
- * the file is copied. Missing files (or remote URLs) are skipped with a
- * warning instead of failing the build — production can set
- * `VITE_CINEMA_VIDEO_URL` to a hosted copy instead.
+ * the file is copied. When `VITE_CINEMA_VIDEO_URL` is set the reel is streamed
+ * remotely, so nothing needs copying. Missing files are reported as warnings
+ * instead of failing the build.
  */
-function copyRootMedia() {
+function copyRootMedia(env = {}) {
   return {
     name: 'copy-root-media',
     apply: 'build',
     async writeBundle(options) {
+      if (env.VITE_CINEMA_VIDEO_URL) return
+
       const outDir = options.dir
         ? resolve(rootDir, options.dir)
         : join(rootDir, 'dist')
@@ -54,20 +56,24 @@ function copyRootMedia() {
   }
 }
 
-export default defineConfig({
-  plugins: [react(), tailwindcss(), copyRootMedia()],
-  server: {
-    watch: {
-      // Image editors and upscalers drop temporary files into the project root.
-      // Watching those files can crash the dev server with EBUSY on Windows.
-      ignored: [
-        '**/.git/**',
-        '**/node_modules/**',
-        '**/*.tmp',
-        '**/~*',
-        '**/*.crdownload',
-        '**/*.partial',
-      ],
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, rootDir, '')
+
+  return {
+    plugins: [react(), tailwindcss(), copyRootMedia(env)],
+    server: {
+      watch: {
+        // Image editors and upscalers drop temporary files into the project root.
+        // Watching those files can crash the dev server with EBUSY on Windows.
+        ignored: [
+          '**/.git/**',
+          '**/node_modules/**',
+          '**/*.tmp',
+          '**/~*',
+          '**/*.crdownload',
+          '**/*.partial',
+        ],
+      },
     },
-  },
+  }
 })
